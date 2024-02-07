@@ -27,19 +27,22 @@ namespace Analytics.Controllers
         [HttpPost]
         public async Task<ActionResult<Weather>> ImportAll()
         {
-            var energyData = _fileService.GetFile<EnergyDto>("C:/WF/HarkApi/Analytics/Analytics/Files/HalfHourlyEnergyData.csv");
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            var root = Directory.GetCurrentDirectory();
+
+            var energyData = _fileService.GetFile<EnergyDto>($"{root}/Files/HalfHourlyEnergyData.csv");
 
             var energyEntities = energyData.Select(e => new Energy(e)).ToList();
 
             await _energyRepo.AddEnergyAsync(energyEntities);
 
-            var anomolies = _fileService.GetFile<EnergyDto>("C:/WF/HarkApi/Analytics/Analytics/Files/HalfHourlyEnergyDataAnomalies.csv");
+            var anomolies = _fileService.GetFile<EnergyDto>($"{root}/Files/HalfHourlyEnergyDataAnomalies.csv");
 
             var anomolyData = anomolies.Select(e => e.Timestamp).ToList();
 
             await _energyRepo.SetAnomoliesAsync(anomolyData);
 
-            var weatherData = _fileService.GetFile<WeatherDto>("C:/WF/HarkApi/Analytics/Analytics/Files/Weather.csv");
+            var weatherData = _fileService.GetFile<WeatherDto>($"{root}/Files/Weather.csv");
 
             var weatherEntities = weatherData.Select(w => new Weather(w)).ToList();
 

@@ -20,7 +20,7 @@ namespace Analytics.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Weather>>> GetWeatherData()
         {
-            return await _context.Weather.ToListAsync();
+            return await _context.Weather.OrderBy(w => w.Date).ToListAsync();
         }
 
         // GET: api/weather/5

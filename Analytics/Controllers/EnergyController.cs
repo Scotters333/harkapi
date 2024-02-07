@@ -20,7 +20,7 @@ namespace Analytics.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Energy>>> GetEnergyData()
         {
-            return await _context.Energy.ToListAsync();
+            return await _context.Energy.OrderBy(e => e.Date).ToListAsync();
         }
 
         // GET: api/energy
